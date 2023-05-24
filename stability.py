@@ -71,22 +71,22 @@ class Stability(Plugin):
             content = e_context['context'].content[:]
             if e_context['context'].type == ContextType.IMAGE_CREATE:
                 # 解析用户输入 如"mj [img2img] prompt1 0.5;"
-                prompt = content
-                if "help" in prompt or "帮助" in prompt:
+                text = content
+                if "help" in text or "帮助" in text:
                     reply.type = ReplyType.INFO
                     reply.content = self.get_help_text(verbose=True)
                 else:
                     flag = False
-                    if self.rule.get("image") in prompt:
+                    if self.rule.get("image") in text:
                         flag = True
-                        prompt = prompt.replace(self.rule.get("image"), "")
-                    if is_chinese(prompt):
-                        prompt = Bridge().fetch_translate(prompt, to_lang="en")
+                        text = text.replace(self.rule.get("image"), "")
+                    if is_chinese(text):
+                        text = Bridge().fetch_translate(text, to_lang="en")
                     params = {**self.default_params}
-                    if params.get("prompt", ""):
-                        params["prompt"] += f", {prompt}"
+                    if params.get("text", ""):
+                        params["text"] += f", {text}"
                     else:
-                        params["prompt"] += f"{prompt}"
+                        params["text"] += f"{text}"
                     logger.info("[RP] params={}".format(params))
                     if flag:
                         self.params_cache[user_id] = params
