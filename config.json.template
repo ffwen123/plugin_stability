@@ -1,0 +1,28 @@
+{
+  "api_url": "https://api.stability.ai/v1/generation/{engine_id}/{}",
+  "text_engine_id": "api的engine_id",
+  "image_engine_id": "api的engine_id",
+  "headers": {
+    "Authorization": "Bearer {api_key}",
+    "Accept": "application/json"
+  },
+  "defaults": {
+    "prompt": "默认词",
+    "weight": 权重
+  },
+  "default_parameters": {
+    "cfg_scale": 7,
+    "clip_guidance_preset": "FAST_BLUE",
+    "samples": 一次出图数量，默认1,
+    "height": 默认512,
+    "width": 默认512,
+    "steps": 默认30
+  },
+  "image_parameters": {
+        "image_strength": 0.35,
+        "init_image_mode": "IMAGE_STRENGTH"
+    },
+  "rule": {
+    "image": "图生图的触发词"
+  }
+}
