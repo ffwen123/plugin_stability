@@ -122,7 +122,7 @@ class Stability(Plugin):
                     cmsg.prepare()
                     img_data = open(content, "rb")
                     post_json = {**self.default_params, **self.image_parameters}
-                    post_json.update({"text_prompts[0][text]": params})
+                    post_json.update({"text_prompts[0][text]": params["text"]})
                     logger.info("[RP] img2img post_json={}".format(post_json))
                     # 调用Stability api图生图
                     image_response = requests.post(
@@ -133,7 +133,7 @@ class Stability(Plugin):
                         reply.content = BytesIO(base64.b64decode(image_response.json()["artifacts"][0]["base64"]))
                     else:
                         reply.type = ReplyType.ERROR
-                        reply.content = "画图失败"
+                        reply.content = "img2img 画图失败"
                         e_context['reply'] = reply
                         logger.error("[RP] Stability  API api_data: %s " % image_response.text)
                     e_context['reply'] = reply
