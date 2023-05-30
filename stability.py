@@ -95,12 +95,8 @@ class Stability(Plugin):
                         reply.type = ReplyType.INFO
                         reply.content = "请发送一张图片给我"
                     else:
-                        post_json = {
-                            **{"text_prompts": [params]},
-                            **self.default_parameters
-                        }
-                        text_header = {**self.headers}
-                        text_header.update({"Content-Type": "application/json"})
+                        post_json = {**{"text_prompts": [params]}, **self.default_parameters}
+                        text_header = {**self.headers, "Content-Type": "application/json"}
                         logger.info("[RP] txt2img post_json={}".format(post_json))
                         # 调用stability api来画图
                         text_response = requests.post(
@@ -124,22 +120,22 @@ class Stability(Plugin):
                     cmsg.prepare()
                     img_data = open(content, "rb")
                     post_json = {**self.default_parameters, **self.image_parameters}
+                    post_json.update({"text_prompts[0][text]": params["text"]})
                     post_json.pop("height", "")
                     post_json.pop("width", "")
-                    post_json.update({"text_prompts[0][text]": params["text"]})
                     logger.info("[RP] img2img post_json={}".format(post_json))
                     # 调用Stability api图生图
-                    image_response = requests.post(
+                    img_response = requests.post(
                         url=self.api_url.format(self.image_engine_id, "image-to-image"), data=post_json,
                         files={"init_image": img_data}, headers=self.headers, timeout=300.05)
-                    if image_response.status_code == 200:
+                    if img_response.status_code == 200:
                         reply.type = ReplyType.IMAGE
-                        reply.content = BytesIO(base64.b64decode(image_response.json()["artifacts"][0]["base64"]))
+                        reply.content = BytesIO(base64.b64decode(img_response.json()["artifacts"][0]["base64"]))
                     else:
                         reply.type = ReplyType.ERROR
                         reply.content = "img2img 画图失败"
                         e_context['reply'] = reply
-                        logger.error("[RP] Stability  API api_data: %s " % image_response.text)
+                        logger.error(f"[RP] Stability API api_data: {img_response.text}, status_code: {img_response.status_code}")
                     e_context['reply'] = reply
                     e_context.action = EventAction.BREAK_PASS  # 事件结束后，跳过处理context的默认逻辑
         except Exception as e:

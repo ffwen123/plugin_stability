@@ -3,7 +3,7 @@
   "text_engine_id": "api的engine_id",
   "image_engine_id": "api的engine_id",
   "headers": {
-    "Authorization": "Bearer {api_key}",
+    "Authorization": "Bearer {你的API 密钥}",
     "Accept": "application/json"
   },
   "defaults": {
@@ -16,7 +16,7 @@
     "samples": 一次出图数量，默认1,
     "height": 默认512,
     "width": 默认512,
-    "steps": 默认30
+    "steps": 默认50
   },
   "image_parameters": {
         "image_strength": 0.35,
