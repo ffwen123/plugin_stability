@@ -23,6 +23,8 @@ from common.expired_dict import ExpiredDict
 
 def is_chinese(prompt):
     for char in prompt:
+        if char in ["\r", "\t", "\n"]:
+            continue
         if "CJK" in unicodedata.name(char):
             return True
     return False
@@ -121,7 +123,9 @@ class Stability(Plugin):
                     del self.params_cache[user_id]
                     cmsg.prepare()
                     img_data = open(content, "rb")
-                    post_json = {**self.default_params, **self.image_parameters}
+                    post_json = {**self.default_parameters, **self.image_parameters}
+                    post_json.pop("height", "")
+                    post_json.pop("width", "")
                     post_json.update({"text_prompts[0][text]": params["text"]})
                     logger.info("[RP] img2img post_json={}".format(post_json))
                     # 调用Stability api图生图
