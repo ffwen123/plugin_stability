@@ -132,8 +132,12 @@ class Stability(Plugin):
                         reply.type = ReplyType.IMAGE
                         reply.content = BytesIO(base64.b64decode(img_response.json()["artifacts"][0]["base64"]))
                     else:
-                        reply.type = ReplyType.ERROR
-                        reply.content = "img2img 画图失败"
+                        if "No available resolution is available for the input" in img_response.json().get("message", ""):
+                            reply.type = ReplyType.INFO
+                            reply.content = "图片过大，分辨率不能超过1024 x 1024"
+                        else:
+                            reply.type = ReplyType.ERROR
+                            reply.content = "img2img 画图失败"
                         e_context['reply'] = reply
                         logger.error(f"[RP] Stability API api_data: {img_response.text}, status_code: {img_response.status_code}")
                     e_context['reply'] = reply
