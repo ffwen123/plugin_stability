@@ -119,14 +119,14 @@ class Stability(Plugin):
                     del self.params_cache[user_id]
                     cmsg.prepare()
                     img_data = open(content, "rb")
-                    post_json = {**self.default_parameters, **self.image_parameters}
-                    post_json.update({"text_prompts[0][text]": params["text"]})
-                    post_json.pop("height", "")
-                    post_json.pop("width", "")
-                    logger.info("[RP] img2img post_json={}".format(post_json))
+                    img_post = {**self.default_parameters, **self.image_parameters}
+                    img_post.update({"text_prompts[0][text]": params["text"]})
+                    img_post.pop("height", "")
+                    img_post.pop("width", "")
+                    logger.info("[RP] img2img post_json={}".format(img_post))
                     # 调用Stability api图生图
                     img_response = requests.post(
-                        url=self.api_url.format(self.image_engine_id, "image-to-image"), data=post_json,
+                        url=self.api_url.format(self.image_engine_id, "image-to-image"), data=img_post,
                         files={"init_image": img_data}, headers=self.headers, timeout=300.05)
                     if img_response.status_code == 200:
                         reply.type = ReplyType.IMAGE
