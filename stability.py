@@ -132,7 +132,7 @@ class Stability(Plugin):
                         reply.type = ReplyType.IMAGE
                         reply.content = BytesIO(base64.b64decode(img_response.json()["artifacts"][0]["base64"]))
                     else:
-                        if "No available resolution is available for the input" in img_response.json().get("message", ""):
+                        if "available resolution" or "image too large" in img_response.json().get("message", ""):
                             reply.type = ReplyType.INFO
                             reply.content = "图片过大，分辨率不能超过1024 x 1024"
                         else:
