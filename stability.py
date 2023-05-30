@@ -123,8 +123,7 @@ class Stability(Plugin):
                     img_post.update({"text_prompts[0][text]": params["text"]})
                     img_post.pop("height", "")
                     img_post.pop("width", "")
-                    img_post.pop("style_preset", "")
-                    logger.info("[RP] img2img post_json={}".format(img_post))
+                    logger.info("[RP] img2img img_post={}".format(img_post))
                     # 调用Stability api图生图
                     img_response = requests.post(
                         url=self.api_url.format(self.image_engine_id, "image-to-image"), data=img_post,
