@@ -123,6 +123,7 @@ class Stability(Plugin):
                     img_post.update({"text_prompts[0][text]": params["text"]})
                     img_post.pop("height", "")
                     img_post.pop("width", "")
+                    img_post.pop("style_preset", "")
                     logger.info("[RP] img2img post_json={}".format(img_post))
                     # 调用Stability api图生图
                     img_response = requests.post(
